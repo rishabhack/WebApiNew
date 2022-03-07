@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebApi.Models;
+using WebApi.Repo;
 
 namespace WebApi
 {
@@ -29,6 +31,10 @@ namespace WebApi
             services.AddControllers();
             var connectionstring = Configuration.GetConnectionString("SqlCon");
             services.AddDbContext<EmpDbContext>(options => options.UseSqlServer(connectionstring));
+            services.AddScoped<IAccountRepo, AccountRepo>();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<EmpDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
