@@ -26,5 +26,17 @@ namespace WebApi.Controllers
             return Unauthorized();
         }
 
+        [HttpPost("Login")]
+        public async Task<IActionResult> LoginIn([FromBody] SignInModel signinModel)
+        {
+            var result = await _accountRepository.LoginInAsync(signinModel);
+            if (string.IsNullOrEmpty(result))
+            {
+                return Unauthorized();
+            }
+            return Ok(result);
+
+        }
+
     }
 }
